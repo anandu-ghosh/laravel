@@ -19,9 +19,10 @@ return new class extends Migration
             $table->string('author',55);
             $table->string('genere',66)->nullable();
             $table->longText('description');
-            $table->integer('isbn')->nullable();
+            $table->string('isbn',66)->nullable();
             $table->longText('image')->nullable();
             $table->string('publisher',55)->nullable();
+            $table->date('published')->nullable();
             $table->timestamps();
         });
     }

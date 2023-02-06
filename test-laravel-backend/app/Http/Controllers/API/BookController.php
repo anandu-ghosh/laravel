@@ -13,6 +13,8 @@ use App\Http\Requests\UpdateBookRequest;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\JsonResponse;
 
+use Illuminate\Support\Facades\Http;
+
 
 class BookController extends BaseController
 {
@@ -101,5 +103,28 @@ class BookController extends BaseController
         $book->delete();
         return $this->sendResponse('Book deleted.');
 
+    }
+
+    //for insert data via given api call http://127.0.0.1:8000/api/apidatas
+
+    public function insertData() 
+    {
+        $client = new \GuzzleHttp\Client();
+        $res = $client->request('GET', 'https://fakerapi.it/api/v1/books?_quantity=100');
+        $books_data = json_decode($res->getBody());
+
+        foreach($books_data->data as $books){
+            $book = new Book;
+            $book->title = $books->title;
+            $book->author = $books->author;
+            $book->genere = $books->genre;
+            $book->description = $books->description;
+            $book->isbn = $books->isbn;
+            $book->image = $books->image;
+            $book->publisher = $books->publisher;
+            $book->published = $books->published;
+            $book->save();
+        }
+        return "DONE";
     }
 }
